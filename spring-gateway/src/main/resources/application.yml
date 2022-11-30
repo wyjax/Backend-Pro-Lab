@@ -7,10 +7,7 @@ spring:
         connect-timeout: 2000
         response-timeout: 300s
       routes:
-        - id: first
-          uri: localhost:8081
-        - id: second
-          uri: localhost:8082
-          metadata:
-            connect-timeout: 200
-            response-timeout: 200
+        - id: after_route
+          uri: https://example.org
+          predicates:
+            - Cookie=mycookie,mycookievalue
