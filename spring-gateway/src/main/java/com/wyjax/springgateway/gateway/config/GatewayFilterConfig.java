@@ -1,6 +1,6 @@
-package com.wyjax.springgateway.config;
+package com.wyjax.springgateway.gateway.config;
 
-import com.wyjax.springgateway.filter.MainGlobalFilter;
+import com.wyjax.springgateway.gateway.filter.MainGlobalFilter;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
