@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RoutingHandler {
 
+    // yml에 정의한 내용이랑 bean으로 정의한 내용은 병합되어 설정된다.
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
