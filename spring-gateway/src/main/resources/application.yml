@@ -7,19 +7,13 @@ spring:
         connect-timeout: 2000
         response-timeout: 300s
       routes:
-        - id: auth_server
-          uri: https://example.org
-          predicates: # Predicate는 필수값이구나... 안하면 에러남
-            - Cookie=mycookie,mycookievalue
-        - id: doas_server
+        - id: AUTH_SERVER
           uri: https://example.org
           predicates:
-            - Cookie=mycookie,mycookievalue
-        - id: linkplus_server
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/account/(?<path>.*), /$\{path}
+        - id: DOAS
           uri: https://example.org
           predicates:
-            - Cookie=mycookie,mycookievalue
-        - id: openlounge_server
-          uri: https://example.org
-          predicates:
-            - Cookie=mycookie,mycookievalue
+            - Path=/api/doas/**
