@@ -7,13 +7,21 @@ spring:
         connect-timeout: 2000
         response-timeout: 300s
       routes:
-        - id: AUTH_SERVICE
+        # account server public
+        - id: auth_service_public
           uri: https://example.org
           predicates:
-            - Path=/api/auth/**
+            - Path=/api/signout/**, /api/signin/**, /api/signup/**
+        # account server private
+        - id: auth_service_private
+          uri: https://example.org
+          predicates:
+            - Path=/api/account/**
           filters:
             - RewritePath=/account/(?<path>.*), /$\{path}
-        - id: RESOURCE_SERVICE
+        - id: resource-server
           uri: https://example.org
           predicates:
             - Path=/api/resource/**
+          filters:
+            - TokenCheckFilter
