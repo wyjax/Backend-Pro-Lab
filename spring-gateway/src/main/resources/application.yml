@@ -7,13 +7,13 @@ spring:
         connect-timeout: 2000
         response-timeout: 300s
       routes:
-        - id: AUTH_SERVER
+        - id: AUTH_SERVICE
           uri: https://example.org
           predicates:
             - Path=/api/auth/**
           filters:
             - RewritePath=/account/(?<path>.*), /$\{path}
-        - id: DOAS
+        - id: RESOURCE_SERVICE
           uri: https://example.org
           predicates:
-            - Path=/api/doas/**
+            - Path=/api/resource/**
