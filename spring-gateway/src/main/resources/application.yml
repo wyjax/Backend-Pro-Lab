@@ -17,5 +17,3 @@ spring:
           uri: https://example.org
           predicates:
             - Path=/api/resource/**
-          filters:
-            - TokenCheckFilter
