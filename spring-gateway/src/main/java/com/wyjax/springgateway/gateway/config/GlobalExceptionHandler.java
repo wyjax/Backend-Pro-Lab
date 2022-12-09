@@ -3,6 +3,7 @@ package com.wyjax.springgateway.gateway.config;
 import com.wyjax.springgateway.common.component.CommonObjectMapper;
 import com.wyjax.springgateway.gateway.exception.GatewayException;
 import com.wyjax.springgateway.gateway.model.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     private final CommonObjectMapper objectMapper;
 
@@ -22,6 +24,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+        log.error(ex.getMessage());
         ServerHttpResponse response = exchange.getResponse();
         HttpStatus status = getStatus(ex);
         ErrorResponse errorResponse = makeErrorResponse(status, ex.getMessage());
