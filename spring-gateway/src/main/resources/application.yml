@@ -7,21 +7,32 @@ spring:
         connect-timeout: 2000
         response-timeout: 300s
       routes:
+        - id: requestratelimiter_route
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/good/**
+          filters:
+            - RewritePath=/api/good/(?<path>.*), /api/v2/good/$\{path}
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 5
+                redis-rate-limiter.requestedTokens: 1
         # account server public
-        - id: auth_service_public
-          uri: https://example.org
-          predicates:
-            - Path=/api/signout/**, /api/signin/**, /api/signup/**
-        # account server private
-        - id: auth_service_private
-          uri: https://example.org
-          predicates:
-            - Path=/api/account/**
-          filters:
-            - RewritePath=/account/(?<path>.*), /$\{path}
-        - id: resource-server
-          uri: https://example.org
-          predicates:
-            - Path=/api/resource/**
-          filters:
-            - TokenCheckFilter
+#        - id: auth_service_public
+#          uri: https://example.org
+#          predicates:
+#            - Path=/api/signout/**, /api/signin/**, /api/signup/**
+#        # account server private
+#        - id: auth_service_private
+#          uri: https://example.org
+#          predicates:
+#            - Path=/api/account/**
+#          filters:
+#            - RewritePath=/account/(?<path>.*), /$\{path}
+#        - id: resource-server
+#          uri: https://example.org
+#          predicates:
+#            - Path=/api/resource/**
+#          filters:
+#            - TokenCheckFilter
