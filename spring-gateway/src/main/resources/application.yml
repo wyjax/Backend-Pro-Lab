@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   application:
     name: gateway-service
@@ -7,17 +9,16 @@ spring:
         connect-timeout: 2000
         response-timeout: 300s
       routes:
-        - id: requestratelimiter_route
-          uri: http://localhost:8080
+        - id: test
+          uri: https://example.org
           predicates:
-            - Path=/api/good/**
+            - Path=/foo/**
           filters:
-            - RewritePath=/api/good/(?<path>.*), /api/v2/good/$\{path}
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter.replenishRate: 1
-                redis-rate-limiter.burstCapacity: 5
-                redis-rate-limiter.requestedTokens: 1
+                redis-rate-limiter.burstCapacity: 10
+                redis-rate-limiter.requestedToknes: 1
         # account server public
 #        - id: auth_service_public
 #          uri: https://example.org
