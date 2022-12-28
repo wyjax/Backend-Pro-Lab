@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <property name="LOG_DIR" value="/opt/spring-gateway/logs"></property>
-    <property name="LOG_FILE" value="spring-gateway.%d{yyyy-MM-dd}"></property>
-    <property name="ERROR_LOG_FILE" value="spring-gateway-error.%d{yyyy-MM-dd}"></property>
+<!--    <property name="LOG_DIR" value="/opt/spring-gateway/logs"></property>-->
+<!--    <property name="LOG_FILE" value="spring-gateway.%d{yyyy-MM-dd}"></property>-->
+<!--    <property name="ERROR_LOG_FILE" value="spring-gateway-error.%d{yyyy-MM-dd}"></property>-->
 
-    <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <Pattern>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] $-3level %logger{5} - %msg %n</pattern>
-            </Pattern>
-        </encoder>
-    </appender>
+<!--    <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <rollingPolicy-->
+<!--                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.log</fileNamePattern>-->
+<!--            <maxHistory>30</maxHistory>-->
+<!--        </rollingPolicy>-->
+<!--        <encoder>-->
+<!--            <Pattern>-->
+<!--                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] $-3level %logger{5} - %msg %n</pattern>-->
+<!--            </Pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
-    <appender name="ERROR_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/${ERROR_LOG_FILE}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>ERROR</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-        <encoder>
-            <Pattern>
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] $-3level %logger{5} - %msg %n</pattern>
-            </Pattern>
-        </encoder>
-    </appender>
-    <root level="info">
-        <appender-ref ref="LOG_FILE"/>
-        <appender-ref ref="ERROR_LOG_FILE"/>
-    </root>
+<!--    <appender name="ERROR_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <rollingPolicy-->
+<!--                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            <fileNamePattern>${LOG_DIR}/${ERROR_LOG_FILE}.log</fileNamePattern>-->
+<!--            <maxHistory>30</maxHistory>-->
+<!--        </rollingPolicy>-->
+<!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+<!--            <level>ERROR</level>-->
+<!--            <onMatch>ACCEPT</onMatch>-->
+<!--            <onMismatch>DENY</onMismatch>-->
+<!--        </filter>-->
+<!--        <encoder>-->
+<!--            <Pattern>-->
+<!--                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] $-3level %logger{5} - %msg %n</pattern>-->
+<!--            </Pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+<!--    <root level="info">-->
+<!--        <appender-ref ref="LOG_FILE"/>-->
+<!--        <appender-ref ref="ERROR_LOG_FILE"/>-->
+<!--    </root>-->
 </configuration>
