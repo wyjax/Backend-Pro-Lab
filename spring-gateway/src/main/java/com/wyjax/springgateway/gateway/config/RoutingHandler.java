@@ -1,5 +1,7 @@
 package com.wyjax.springgateway.gateway.config;
 
+import com.wyjax.springgateway.route.component.ApiRouteLocator;
+import com.wyjax.springgateway.route.service.ApiRouteService;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -18,6 +20,12 @@ public class RoutingHandler {
                         .path("/second")
                         .uri("http://localhost:8081")
                 ).build();
+    }
+
+    @Bean
+    public RouteLocator routeLocator(ApiRouteService apiRouteService,
+                                     RouteLocatorBuilder routeLocatorBuilder) {
+        return new ApiRouteLocator(apiRouteService, routeLocatorBuilder);
     }
 
     @Bean
