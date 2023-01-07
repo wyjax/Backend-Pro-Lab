@@ -1,0 +1,2 @@
+com/wyjax/springredis/SpringRedisApplicationTests.java
+ com.wyjax.springredis.SpringRedisApplicationTests
