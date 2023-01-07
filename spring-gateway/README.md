@@ -38,9 +38,12 @@ routeLocator들이 있는데 Java DSL로 정의된 route들에 대한 정보를 
     입력 받은 RouteLocator를 delegate로 가지고 있음
     
     CacheFlux에서 CACHE_KEY를 사용하여 매칭 값이 있으면 해당 값을 멤버 변수로 저장한다. 없을 경우 delegate로 가지는 RouteLocatro에서 Flux<Route>를 가져와서 정렬하여 저장
-    
+
+- RoutePredicateHandlerMapping
+    여기서 알맞은 predicate 맞는거 가져옴
 
 [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.NettyWriteResponseFilter@486e9d1d}, order = -1]
 [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.ForwardPathFilter@67e0fd6d}, order = 0]
 [[RewritePath /api/good/(?<segment>.*) = '/api/${segment}'], order = 1]
 [GatewayFilterAdapter{delegate=org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter@5e5ddfbc}, order = 10000]
+
