@@ -7,10 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.*;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
@@ -26,17 +23,21 @@ public class RedisConfig {
 
     @Bean
     public ReactiveRedisTemplate<String, Object> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
-        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        GenericJackson2JsonRedisSerializer genericToStringSerializer = new GenericJackson2JsonRedisSerializer();
-        
+        RedisSerializer redisSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Object> jsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+
         RedisSerializationContext<String, Object> serializationContext =
-                RedisSerializationContext.<String, Object>newSerializationContext(jdkSerializationRedisSerializer)
-                        .key(stringRedisSerializer)
-                        .value(genericToStringSerializer)
+                RedisSerializationContext.<String, Object>newSerializationContext(redisSerializer)
+                        .key(redisSerializer)
+                        .value(jsonRedisSerializer)
                         .build();
         return new ReactiveRedisTemplate<>(factory, serializationContext);
     }
+    /*
+        GenericJackson2JsonRedisSerializer 을 value Serializer 로 사용하지 않는 이유는
+        json string으로 redis에 저장시 class 정보가 같이 들어가게 된다. 그래서 저장한 후에 필드 정보가 맞더라도
+        class 정보에 맞지 않는다면 deSerialize 시에 문제가 발생하게 된다.
+     */
 
 //
 //    @Bean
@@ -57,7 +58,7 @@ public class RedisConfig {
 //        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 //        redisTemplate.setConnectionFactory(factory);
 //        redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+//        redisTemplate.setValueSerializer(new StringRedisSerializer());
 //        return redisTemplate;
 //    }
 //
