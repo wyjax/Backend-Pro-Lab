@@ -3,18 +3,15 @@ package com.wyjax.springreactiveredis.config;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.time.Duration;
 
 @EnableTransactionManagement
 @EnableCaching
@@ -22,34 +19,55 @@ import java.time.Duration;
 public class RedisConfig {
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactor() {
-        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-                .commandTimeout(Duration.ofSeconds(3))
-                .clientName("test-server")
-                .commandTimeout(Duration.ofSeconds(3))
-                .shutdownTimeout(Duration.ZERO)
-                .build();
-        RedisStandaloneConfiguration standaloneConfig = new RedisStandaloneConfiguration("localhost", 6379);
-        // netty 기반은 Lettuce를 사용하는 것이 좋다. lettuce는 netty 기반으로 만들어진 커넥터이다.
-        return new LettuceConnectionFactory(standaloneConfig, clientConfig);
+    @Primary
+    public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory() {
+        return new LettuceConnectionFactory("localhost", 6379);
     }
 
-    // 트랜잭션
+    @Bean
+    public ReactiveRedisTemplate<String, Object> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
+        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        GenericJackson2JsonRedisSerializer genericToStringSerializer = new GenericJackson2JsonRedisSerializer();
+        
+        RedisSerializationContext<String, Object> serializationContext =
+                RedisSerializationContext.<String, Object>newSerializationContext(jdkSerializationRedisSerializer)
+                        .key(stringRedisSerializer)
+                        .value(genericToStringSerializer)
+                        .build();
+        return new ReactiveRedisTemplate<>(factory, serializationContext);
+    }
+
+//
 //    @Bean
-//    public PlatformTransactionManager transactionManager() {
-//        return new DataSourceTransactionManagerAutoConfiguration()
+//    public ReactiveRedisTemplate<String, String> customReactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
+//                StringRedisSerializer keySerializer = new StringRedisSerializer();
+//        Jackson2JsonRedisSerializer<String> valueSerializer = new Jackson2JsonRedisSerializer<>(String.class);
+//
+//        RedisSerializationContextBuilder<String, String> builder = newSerializationContext(keySerializer);
+//        RedisSerializationContext<String, String> context = builder.value(valueSerializer).build();
+////        return new ReactiveRedisTemplate<>(factory, context);
+//
+//
+//        return new ReactiveRedisTemplate<>(factory, RedisSerializationContext.string());
 //    }
 
-    @Bean
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory factory) {
-        return RedisCacheManager.builder(factory)
-                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
-                .transactionAware()
-                .build();
-    }
-
-    @Bean
-    public ReactiveRedisTemplate<String, String> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
-        return new ReactiveStringRedisTemplate(factory);
-    }
+//    @Bean
+//    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+//        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+//        redisTemplate.setConnectionFactory(factory);
+//        redisTemplate.setKeySerializer(new StringRedisSerializer());
+//        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+//        return redisTemplate;
+//    }
+//
+//    @Bean
+//    public ReactiveRedisTemplate<String, String> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
+//        StringRedisSerializer keySerializer = new StringRedisSerializer();
+//        Jackson2JsonRedisSerializer<String> valueSerializer = new Jackson2JsonRedisSerializer<>(String.class);
+//
+//        RedisSerializationContextBuilder<String, String> builder = newSerializationContext(keySerializer);
+//        RedisSerializationContext<String, String> context = builder.value(valueSerializer).build();
+//        return new ReactiveRedisTemplate<>(factory, context);
+//    }
 }
