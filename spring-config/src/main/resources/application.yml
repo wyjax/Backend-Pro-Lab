@@ -1,0 +1,21 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://stash.daou.co.kr/scm/~umjugnki/dop-config-repo.git
+          timeout: 10
+          default-label: master
+          host-key:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
