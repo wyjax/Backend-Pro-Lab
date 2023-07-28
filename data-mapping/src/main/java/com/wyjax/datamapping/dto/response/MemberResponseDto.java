@@ -1,4 +1,4 @@
-package com.wyjax.datamapping.dto;
+package com.wyjax.datamapping.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

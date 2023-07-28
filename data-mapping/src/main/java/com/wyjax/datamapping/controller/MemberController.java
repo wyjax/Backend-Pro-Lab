@@ -1,6 +1,6 @@
 package com.wyjax.datamapping.controller;
 
-import com.wyjax.datamapping.dto.MemberResponseDto;
+import com.wyjax.datamapping.dto.response.MemberResponseDto;
 import com.wyjax.datamapping.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
