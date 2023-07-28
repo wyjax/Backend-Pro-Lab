@@ -8,3 +8,4 @@ public interface MemberOutPort {
 
     Member get(Long memberId);
 }
+
