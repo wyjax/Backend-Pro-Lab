@@ -12,5 +12,5 @@ import lombok.ToString;
 public class MemberExternalResponseDto {
 
     private String myName;
-    private String myAge;
+    private int myAge;
 }
