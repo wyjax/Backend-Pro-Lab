@@ -15,6 +15,13 @@ public interface MemberMapper {
 
     MemberResponseDto toResponseDto(Member member);
 
+    default MemberResponseDto toCustomResponseDto(Member member) {
+        MemberResponseDto dto = new MemberResponseDto();
+        dto.setAge(member.getAge());
+        dto.setName(member.getName());
+        return dto;
+    }
+
     @Mapping(target = "myName", source = "name")
     @Mapping(target = "myAge", source = "age")
     MemberExternalResponseDto toExternalResponse(Member member);
