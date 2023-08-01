@@ -4,6 +4,7 @@ import com.wyjax.datamapping.domain.Member;
 import com.wyjax.datamapping.dto.response.MemberExternalResponseDto;
 import com.wyjax.datamapping.dto.response.MemberInfoResponseDto;
 import com.wyjax.datamapping.dto.response.MemberResponseDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,7 +18,20 @@ class MemberMapperTest {
         Member member = new Member("엄정기", 29);
         // when
         MemberResponseDto dto = MemberMapper.INSTANCE.toResponseDto(member);
-        System.out.println(dto);
+        // then
+        Assertions.assertThat(dto.getName()).isEqualTo(member.getName());
+        Assertions.assertThat(dto.getAge()).isEqualTo(member.getAge());
+    }
+
+    @Test
+    void mapperCustomMethod() {
+        // given
+        Member member = new Member("엄정기", 29);
+        // when
+        MemberResponseDto dto = MemberMapper.INSTANCE.toCustomResponseDto(member);
+        // then
+        Assertions.assertThat(dto.getName()).isEqualTo(member.getName());
+        Assertions.assertThat(dto.getAge()).isEqualTo(member.getAge());
     }
 
     @Test
@@ -26,7 +40,9 @@ class MemberMapperTest {
         Member member = new Member("엄정기", 29);
         // when
         MemberExternalResponseDto dto = MemberMapper.INSTANCE.toExternalResponse(member);
-        System.out.println(dto);
+        // then
+        Assertions.assertThat(dto.getMyName()).isEqualTo(member.getName());
+        Assertions.assertThat(dto.getMyAge()).isEqualTo(member.getAge());
     }
 
     @Test
@@ -36,6 +52,9 @@ class MemberMapperTest {
         String address = "경기도 용인시 기흥구";
         // when
         MemberInfoResponseDto dto = MemberMapper.INSTANCE.toMemberInfoResponse(member, address);
-        System.out.println(dto);
+        // then
+        Assertions.assertThat(dto.getName()).isEqualTo(member.getName());
+        Assertions.assertThat(dto.getAge()).isEqualTo(member.getAge());
+        Assertions.assertThat(dto.getAddress()).isEqualTo(address);
     }
 }
