@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @RestController
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController  {
     private final MemberService memberService;
 
     @GetMapping("/api/members")
