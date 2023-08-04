@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 2000
+      routes:
+        - id: test
+          uri: http://localhost8444
+          predicates:
+            - Path=/api/**
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-type: time_based
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 95
+        slow-call-duration-threshold: 3s
+        minimum-number-of-calls: 50
+        permitted-number-of-calls-in-half-open-state: 500
+        ignore-exceptions:
+          - com.wyjax.scgcircuitbreaker.exception.AuthenticationException
+server:
+  port: 8002
+
