@@ -1,21 +1,14 @@
 package com.wyjax.scgcircuitbreaker.common.circuitbreaker;
 
-import com.wyjax.scgcircuitbreaker.exception.AuthenticationException;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.timelimiter.TimeLimiterRegistry;
-import java.io.IOException;
 import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.HttpServerErrorException;
 
 @Configuration
 public class BasicCircuitBreakerConfig {
-
-    public static final Class[] IGNORE_EXCEPTIONS = new Class[]{
-        AuthenticationException.class, IOException.class, HttpServerErrorException.class,
-        IllegalArgumentException.class, IllegalStateException.class};
 
     @Bean
     public ReactiveResilience4JCircuitBreakerFactory resilience4JCircuitBreakerFactory(
