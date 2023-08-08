@@ -26,6 +26,8 @@ public class BasicCircuitBreakerConfig {
     @Bean
     public Customizer<ReactiveResilience4JCircuitBreakerFactory> defaultCircuitBreaker(
         CircuitBreakerRegistry registry) {
+        // registry에는 yml에서 정의헀었던 circuit breaker의 데이터가 넘어오게 된다. 이거를 넘기면? 끝난다.
+        // 아래의 주석은 어떻게 사용할지에 대해서 고민했던 흔적
         return factory -> factory.configureCircuitBreakerRegistry(registry);
     }
 
