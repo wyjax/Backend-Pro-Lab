@@ -20,11 +20,12 @@ resilience4j:
         sliding-window-type: time_based
         sliding-window-size: 10 # 배열 사이즈가 10이여서 최소 10번의 요청은 들어와야함 > 30초 동안의 요청을 체크
         failure-rate-threshold: 50
-        slow-call-rate-threshold: 50 # slow api 비율
+        slow-call-rate-threshold: 60 # slow api 비율
         slow-call-duration-threshold: 5s # slow circuit-breaker는 나눠서 적용하면 될 듯 싶다. 필요한 곳에만 적용하는 방법으로
-        minimum-number-of-calls: 50 # 최소 요청수
-#        permitted-number-of-calls-in-half-open-state: 500
-        wait-duration-in-open-state: 10s
+        minimum-number-of-calls: 20 # 최소 요청수
+        permitted-number-of-calls-in-half-open-state: 20
+        # permitted-number-of-calls-in-half-open-state: 500
+        wait-duration-in-open-state: 15s # circuit이 open되고나서 몇 초 후에 closed 되는가
         ignore-exceptions:
           - com.wyjax.scgcircuitbreaker.exception.AuthenticationException
           - java.io.IOException
