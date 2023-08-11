@@ -1,29 +1,49 @@
 server:
   port: 8002
 spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 5000
+      connect-timeout: 10000
+      password: tnseornrqkq1@
   cloud:
     gateway:
       httpclient:
-        connect-timeout: 2000
+        connect-timeout: 5000
       routes:
         - id: test
-          uri: http://localhost8444
+          uri: http://localhost:8444
           predicates:
-            - Path=/api/**
+            - Path=/api/test/**
           filters:
-            - CircuitBreaker=defaultCircuitBreaker
+#            - name: CircuitBreaker
+#              args:
+#                name: gwCircuit
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 30
+                redis-rate-limiter.requestedTokens: 1
 resilience4j:
+#  timelimiter:
+#    configs:
+#      default:
+#        cancelRunningFuture: true
+#        timeoutDuration: 10s
   circuitbreaker:
     configs:
       default:
         register-health-indicator: true
-        sliding-window-type: time_based
-        sliding-window-size: 10 # 배열 사이즈가 10이여서 최소 10번의 요청은 들어와야함 > 30초 동안의 요청을 체크
-        failure-rate-threshold: 50
+        sliding-window-type: count_based
+        sliding-window-size: 5 # 배열 사이즈가 10이여서 최소 10번의 요청은 들어와야함
+        failure-rate-threshold: 10
         slow-call-rate-threshold: 60 # slow api 비율
         slow-call-duration-threshold: 5s # slow circuit-breaker는 나눠서 적용하면 될 듯 싶다. 필요한 곳에만 적용하는 방법으로
-        minimum-number-of-calls: 20 # 최소 요청수
-        permitted-number-of-calls-in-half-open-state: 20
+        minimum-number-of-calls: 10 # 최소 요청수
+        # permitted-number-of-calls-in-half-open-state: 10
         # permitted-number-of-calls-in-half-open-state: 500
         wait-duration-in-open-state: 15s # circuit이 open되고나서 몇 초 후에 closed 되는가
         ignore-exceptions:
@@ -32,6 +52,18 @@ resilience4j:
           - org.springframework.web.client.HttpServerErrorException
           - java.lang.IllegalStateException
           - java.lang.IllegalArgumentException
+        record-exceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+  ratelimiter:
+    metrics:
+      enabled: true
+    configs:
+      default:
+        register-health-indicator: true
+        limit-for-period: 3 # default 50
+        limit-refresh-period: 60s # 500 nano
+        timeout-duration: 1s # default 5s
   bulkhead:
     configs:
       default:
@@ -45,6 +77,8 @@ resilience4j:
 management:
   health:
     circuitbreakers:
+      enabled: true
+    ratelimiters:
       enabled: true
   endpoint:
     health:
@@ -60,3 +94,6 @@ management:
       resilience4j:
         circuitbreaker:
           calls: true
+logging:
+  level:
+    root: info
