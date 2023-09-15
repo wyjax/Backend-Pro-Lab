@@ -18,9 +18,9 @@ spring:
           predicates:
             - Path=/api/test/**
           filters:
-#            - name: CircuitBreaker
-#              args:
-#                name: gwCircuit
+            - name: CircuitBreaker
+              args:
+                name: gwCircuit
             - name: RequestRateLimiter
               args:
                 key-resolver: "#{@ipKeyResolver}"
