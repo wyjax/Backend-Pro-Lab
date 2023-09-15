@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class ApiLimiterService {
+
     private final ApiLimiterRepository apiLimiterRepository;
 
     public Flux<ApiLimiter> getApiLimiters() {
@@ -19,7 +20,7 @@ public class ApiLimiterService {
 
     public Mono<ApiLimiter> createApiLimiter(ApiLimiterModel apiLimiterModel) {
         ApiLimiter apiLimiter = ApiLimiter.builder()
-                .build();
+            .build();
         return apiLimiterRepository.save(apiLimiter);
     }
 

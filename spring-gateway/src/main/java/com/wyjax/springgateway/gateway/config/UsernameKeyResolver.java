@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 
 @Component("usernameKeyResolver")
 public class UsernameKeyResolver implements KeyResolver {
+
     @Override
     public Mono<String> resolve(ServerWebExchange exchange) {
         String name = exchange.getRequest().getQueryParams().getFirst("name");

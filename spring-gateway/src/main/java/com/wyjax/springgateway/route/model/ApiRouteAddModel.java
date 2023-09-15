@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ApiRouteAddModel {
+
     private String uri;
     private String path;
     private String method;

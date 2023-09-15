@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
+
     private final CommonObjectMapper objectMapper;
 
     public GlobalExceptionHandler() {
@@ -48,8 +49,8 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     private ErrorResponse makeErrorResponse(HttpStatus status, String message) {
         return ErrorResponse.builder()
-                .message(message)
-                .status(status.value())
-                .build();
+            .message(message)
+            .status(status.value())
+            .build();
     }
 }

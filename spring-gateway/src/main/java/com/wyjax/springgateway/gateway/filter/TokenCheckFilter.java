@@ -1,5 +1,7 @@
 package com.wyjax.springgateway.gateway.filter;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import com.wyjax.springgateway.gateway.exception.GatewayException;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -7,10 +9,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 @Component
 public class TokenCheckFilter extends AbstractGatewayFilterFactory<TokenCheckFilter.Config> {
+
     private static final String TOKEN_PREFIX = "Bearer ";
 
     public TokenCheckFilter() {

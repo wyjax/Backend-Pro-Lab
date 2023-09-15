@@ -15,16 +15,16 @@ public class RoutingHandler {
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("r1", r -> r.host("localhost:8081")
-                        .and()
-                        .path("/second")
-                        .uri("http://localhost:8081")
-                ).build();
+            .route("r1", r -> r.host("localhost:8081")
+                .and()
+                .path("/second")
+                .uri("http://localhost:8081")
+            ).build();
     }
 
     @Bean
     public RouteLocator routeLocator(ApiRouteService apiRouteService,
-                                     RouteLocatorBuilder routeLocatorBuilder) {
+        RouteLocatorBuilder routeLocatorBuilder) {
         return new ApiRouteLocator(apiRouteService, routeLocatorBuilder);
     }
 

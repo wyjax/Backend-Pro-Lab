@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class GatewayException extends IllegalArgumentException {
+
     private final HttpStatus status;
 
     public GatewayException(HttpStatus status) {

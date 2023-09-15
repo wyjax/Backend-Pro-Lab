@@ -1,4 +1,4 @@
- package com.wyjax.springgateway.route.controller;
+package com.wyjax.springgateway.route.controller;
 
 import com.wyjax.springgateway.route.domain.ApiLimiter;
 import com.wyjax.springgateway.route.model.ApiLimiterModel;
@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 public class ApiLimiterController {
+
     private final ApiLimiterService apiLimiterService;
 
     @GetMapping("/api/limiter")

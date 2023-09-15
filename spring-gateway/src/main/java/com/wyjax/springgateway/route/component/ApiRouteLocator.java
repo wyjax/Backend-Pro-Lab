@@ -9,11 +9,11 @@ import org.springframework.cloud.gateway.route.builder.BooleanSpec;
 import org.springframework.cloud.gateway.route.builder.Buildable;
 import org.springframework.cloud.gateway.route.builder.PredicateSpec;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
-import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 @AllArgsConstructor
 public class ApiRouteLocator implements RouteLocator {
+
     private final ApiRouteService apiRouteService;
     private final RouteLocatorBuilder routeLocatorBuilder;
 
@@ -21,11 +21,11 @@ public class ApiRouteLocator implements RouteLocator {
     public Flux<Route> getRoutes() {
         RouteLocatorBuilder.Builder routesBuilder = routeLocatorBuilder.routes();
         return apiRouteService.getRoutes()
-                .map(apiRoute -> routesBuilder.route(String.valueOf(apiRoute.getId()),
-                        predicateSpec -> setPredicateSpec(apiRoute, predicateSpec)))
-                .collectList()
-                .flatMapMany(builders -> routesBuilder.build()
-                        .getRoutes());
+            .map(apiRoute -> routesBuilder.route(String.valueOf(apiRoute.getId()),
+                predicateSpec -> setPredicateSpec(apiRoute, predicateSpec)))
+            .collectList()
+            .flatMapMany(builders -> routesBuilder.build()
+                .getRoutes());
     }
 
     private Buildable<Route> setPredicateSpec(ApiRoute apiRoute, PredicateSpec predicateSpec) {

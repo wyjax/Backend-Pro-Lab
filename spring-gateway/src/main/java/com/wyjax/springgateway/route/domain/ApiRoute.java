@@ -13,6 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiRoute {
+
     @Id
     private Long id;
 
