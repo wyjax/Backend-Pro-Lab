@@ -1,10 +1,11 @@
 package com.wyjax.springgateway.route.repository;
 
 import com.wyjax.springgateway.route.domain.ApiLimiter;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import reactor.core.publisher.Mono;
 
-public interface ApiLimiterRepository extends ReactiveCrudRepository<ApiLimiter, Long> {
+public interface ApiLimiterRepository extends JpaRepository<ApiLimiter, Long> {
 
-    Mono<ApiLimiter> findByPathAndMethodAndActiveIsTrue(String path, String method);
+    Optional<ApiLimiter> findByPathAndMethodAndActiveIsTrue(String path, String method);
 }

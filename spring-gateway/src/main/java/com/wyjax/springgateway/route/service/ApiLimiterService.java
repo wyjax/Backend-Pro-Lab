@@ -5,25 +5,31 @@ import com.wyjax.springgateway.route.model.ApiLimiterModel;
 import com.wyjax.springgateway.route.repository.ApiLimiterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class ApiLimiterService {
+
     private final ApiLimiterRepository apiLimiterRepository;
 
     public Flux<ApiLimiter> getApiLimiters() {
-        return apiLimiterRepository.findAll();
+        return Flux.fromIterable(apiLimiterRepository.findAll());
     }
 
+    @Transactional
     public Mono<ApiLimiter> createApiLimiter(ApiLimiterModel apiLimiterModel) {
         ApiLimiter apiLimiter = ApiLimiter.builder()
-                .build();
-        return apiLimiterRepository.save(apiLimiter);
+            .build();
+        return Mono.just(apiLimiterRepository.save(apiLimiter));
     }
 
     public Mono<ApiLimiter> getApiLimiter(String path, String method) {
-        return apiLimiterRepository.findByPathAndMethodAndActiveIsTrue(path, method);
+        ApiLimiter apiLimiter = apiLimiterRepository.findByPathAndMethodAndActiveIsTrue(path,
+                method)
+            .orElseThrow();
+        return Mono.just(apiLimiter);
     }
 }
