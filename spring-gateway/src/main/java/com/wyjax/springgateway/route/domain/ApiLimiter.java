@@ -1,22 +1,26 @@
 package com.wyjax.springgateway.route.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
-import java.io.Serializable;
-
-@Data
-@Table("api_limiter")
+@Getter
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiLimiter implements Serializable {
+
     private static final long serialVersionUID = -5132504076641395736L;
-    @Id // Indicating that this field is primary key in our database table
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String path;
