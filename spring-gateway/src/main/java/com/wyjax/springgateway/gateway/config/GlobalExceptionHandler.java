@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,7 +27,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
         log.error(ex.getMessage());
         ServerHttpResponse response = exchange.getResponse();
-        HttpStatus status = getStatus(ex);
+        HttpStatusCode status = getStatus(ex);
         ErrorResponse errorResponse = makeErrorResponse(status, ex.getMessage());
 
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
@@ -37,16 +38,16 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         return exchange.getResponse().writeWith(Flux.just(dataBuffer));
     }
 
-    private HttpStatus getStatus(Throwable ex) {
+    private HttpStatusCode getStatus(Throwable ex) {
         if (ex instanceof GatewayException) {
             return ((GatewayException) ex).getStatus();
         } else if (ex instanceof ResponseStatusException) {
-            return ((ResponseStatusException) ex).getStatus();
+            return ((ResponseStatusException) ex).getStatusCode();
         }
         return HttpStatus.BAD_REQUEST;
     }
 
-    private ErrorResponse makeErrorResponse(HttpStatus status, String message) {
+    private ErrorResponse makeErrorResponse(HttpStatusCode status, String message) {
         return ErrorResponse.builder()
                 .message(message)
                 .status(status.value())
