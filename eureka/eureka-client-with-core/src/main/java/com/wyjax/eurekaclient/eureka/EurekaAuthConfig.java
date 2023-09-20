@@ -5,6 +5,7 @@ import com.netflix.appinfo.EurekaInstanceConfig;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.appinfo.MyDataCenterInstanceConfig;
 import com.netflix.appinfo.providers.EurekaConfigBasedInstanceInfoProvider;
+import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.discovery.DefaultEurekaClientConfig;
 import com.netflix.discovery.DiscoveryClient;
 import com.netflix.discovery.EurekaClient;
@@ -21,13 +22,13 @@ public class EurekaAuthConfig {
 
     @PostConstruct
     public void init() {
-//        DynamicPropertyFactory configInstance = DynamicPropertyFactory.getInstance();
+        DynamicPropertyFactory configInstance = DynamicPropertyFactory.getInstance();
         MyDataCenterInstanceConfig config = new MyDataCenterInstanceConfig();
         ApplicationInfoManager applicationInfoManager = initializeApplicationInfoManager(config);
         EurekaClient eurekaClient = initializeEurekaClient(applicationInfoManager,
             new DefaultEurekaClientConfig());
 
-        EurekaService eurekaService = new EurekaService(applicationInfoManager, eurekaClient);
+        EurekaService eurekaService = new EurekaService(applicationInfoManager, eurekaClient, configInstance);
         try {
             eurekaService.start();
         } finally {
