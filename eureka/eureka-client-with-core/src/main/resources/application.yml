@@ -1,0 +1,16 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: eureka-client
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+#    hostname: localhost
+    app-group-name: jk
+    appname: jk-app1
+    instance-id: 444
