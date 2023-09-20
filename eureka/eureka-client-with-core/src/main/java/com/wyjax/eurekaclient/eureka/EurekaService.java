@@ -2,6 +2,7 @@ package com.wyjax.eurekaclient.eureka;
 
 import com.netflix.appinfo.ApplicationInfoManager;
 import com.netflix.appinfo.InstanceInfo;
+import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.discovery.EurekaClient;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -12,16 +13,18 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
-import org.springframework.stereotype.Service;
 
 public class EurekaService {
 
     private final ApplicationInfoManager applicationInfoManager;
+    private final DynamicPropertyFactory configInstance;
     private final EurekaClient eurekaClient;
 
-    public EurekaService(ApplicationInfoManager infoManager, EurekaClient eurekaClient) {
+    public EurekaService(ApplicationInfoManager infoManager, EurekaClient eurekaClient,
+        DynamicPropertyFactory configInstance) {
         this.applicationInfoManager = infoManager;
         this.eurekaClient = eurekaClient;
+        this.configInstance = configInstance;
     }
 
     @PostConstruct
@@ -74,7 +77,8 @@ public class EurekaService {
 
     private void waitForRegistrationWithEureka(EurekaClient eurekaClient) {
         // my vip address to listen on
-        String vipAddress = "http://localhost:8761";
+        String vipAddress = configInstance.getStringProperty("eureka.vipAddress",
+            "http://localhost:8761").get();
         InstanceInfo nextServerInfo = null;
         while (nextServerInfo == null) {
             try {
